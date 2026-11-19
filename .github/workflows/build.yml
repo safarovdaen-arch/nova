@@ -1,0 +1,20 @@
+name: build
+on: [push, workflow_dispatch]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: unzip -q NovaClient-1.16.5.zip
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+      - uses: gradle/actions/setup-gradle@v3
+        with:
+          gradle-version: 7.3.3
+      - run: cd NovaClient && gradle build --no-daemon
+      - uses: actions/upload-artifact@v4
+        with:
+          name: NovaClient
+          path: NovaClient/build/libs/nova-client-1.0.0.jar
